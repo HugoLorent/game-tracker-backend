@@ -6,7 +6,7 @@ export class UsersController {
   private readonly logger = new Logger(UsersController.name);
   constructor(private readonly usersService: UsersService) {}
 
-  @Post('register')
+  @Post()
   async register(
     @Body('name') name: string,
     @Body('password') password: string,
