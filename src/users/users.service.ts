@@ -1,8 +1,15 @@
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -13,18 +20,82 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  public async create(name: string, password: string): Promise<User> {
+  public async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      if (!name || !password) {
-        throw new BadRequestException('Name and password are required');
+      if (!createUserDto.name || !createUserDto.password) {
+        throw new BadRequestException('Name and password are required in body');
       }
       const user = new User();
-      const passwordHash = await bcrypt.hash(password, this.saltRounds);
-      user.name = name;
+      const passwordHash = await bcrypt.hash(
+        createUserDto.password,
+        this.saltRounds,
+      );
+      user.name = createUserDto.name;
       user.passwordHash = passwordHash;
       return this.usersRepository.save(user);
     } catch (error) {
       this.logger.error('Error creating user', error);
+      throw error;
+    }
+  }
+
+  public async findOne(id: number): Promise<User> {
+    try {
+      if (!id) {
+        throw new BadRequestException('Id is required in route params');
+      }
+
+      const user = await this.usersRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      return user;
+    } catch (error) {
+      this.logger.error('Error finding user', error);
+      throw error;
+    }
+  }
+
+  public async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    try {
+      if (!id) {
+        throw new BadRequestException('Id is required in route params');
+      }
+
+      if (!updateUserDto) {
+        throw new BadRequestException('Name or password are required in body');
+      }
+      const toUpdate = await this.usersRepository.findOne({ where: { id } });
+      if (!toUpdate) {
+        throw new NotFoundException('User not found');
+      }
+      if (updateUserDto.password) {
+        const passwordHash = await bcrypt.hash(
+          updateUserDto.password,
+          this.saltRounds,
+        );
+        toUpdate.passwordHash = passwordHash;
+      }
+      Object.assign(toUpdate, updateUserDto);
+      return await this.usersRepository.save(toUpdate);
+    } catch (error) {
+      this.logger.error('Error updating user', error);
+      throw error;
+    }
+  }
+
+  public async delete(id: number): Promise<User> {
+    try {
+      if (!id) {
+        throw new BadRequestException('Id is required in route params');
+      }
+      const toDelete = await this.usersRepository.findOne({ where: { id } });
+      if (!toDelete) {
+        throw new NotFoundException('User not found');
+      }
+      return await this.usersRepository.remove(toDelete);
+    } catch (error) {
+      this.logger.error('Error deleting user', error);
       throw error;
     }
   }
