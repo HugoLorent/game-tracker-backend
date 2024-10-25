@@ -20,6 +20,23 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
+  public async findUser(id: number): Promise<User> {
+    try {
+      if (!id) {
+        throw new BadRequestException('Id is required in route params');
+      }
+
+      const user = await this.usersRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      return user;
+    } catch (error) {
+      this.logger.error('Error finding user', error);
+      throw error;
+    }
+  }
+
   public async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       if (!createUserDto.name || !createUserDto.password) {
@@ -39,30 +56,13 @@ export class UsersService {
     }
   }
 
-  public async findOne(id: number): Promise<User> {
-    try {
-      if (!id) {
-        throw new BadRequestException('Id is required in route params');
-      }
-
-      const user = await this.usersRepository.findOne({ where: { id } });
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
-      return user;
-    } catch (error) {
-      this.logger.error('Error finding user', error);
-      throw error;
-    }
-  }
-
   public async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     try {
       if (!id) {
         throw new BadRequestException('Id is required in route params');
       }
 
-      if (!updateUserDto) {
+      if (!updateUserDto.name && !updateUserDto.password) {
         throw new BadRequestException('Name or password are required in body');
       }
       const toUpdate = await this.usersRepository.findOne({ where: { id } });

@@ -16,19 +16,19 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  @Get(':id')
+  async findUser(@Param('id') id: number): Promise<User> {
     try {
-      return await this.usersService.create(createUserDto);
+      return await this.usersService.findUser(id);
     } catch (error) {
       throw error;
     }
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<User> {
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     try {
-      return await this.usersService.findOne(id);
+      return await this.usersService.create(createUserDto);
     } catch (error) {
       throw error;
     }
