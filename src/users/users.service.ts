@@ -69,6 +69,10 @@ export class UsersService {
       if (!toUpdate) {
         throw new NotFoundException('User not found');
       }
+
+      if (updateUserDto.name) {
+        toUpdate.name = updateUserDto.name;
+      }
       if (updateUserDto.password) {
         const passwordHash = await bcrypt.hash(
           updateUserDto.password,
@@ -76,7 +80,6 @@ export class UsersService {
         );
         toUpdate.passwordHash = passwordHash;
       }
-      Object.assign(toUpdate, updateUserDto);
       return await this.usersRepository.save(toUpdate);
     } catch (error) {
       this.logger.error('Error updating user', error);

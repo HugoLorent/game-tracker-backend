@@ -102,16 +102,22 @@ describe('UsersService', () => {
       };
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(user);
       jest.spyOn(mockUserRepository, 'save').mockResolvedValue(user);
-      const result = await service.update(1, { name: 'test2' });
+      jest
+        .spyOn(bcrypt, 'hash')
+        .mockImplementation(() => Promise.resolve('newHashedPassword'));
+      const result = await service.update(1, {
+        name: 'test2',
+        password: 'newHashedPassword',
+      });
       expect(mockUserRepository.findOne).toHaveBeenCalled();
       expect(mockUserRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
       });
       expect(mockUserRepository.save).toHaveBeenCalled();
-      expect(mockUserRepository.save).toHaveBeenCalledWith({
+      expect(mockUserRepository.save).toHaveBeenNthCalledWith(2, {
         id: 1,
         name: 'test2',
-        passwordHash: 'hashedPassword',
+        passwordHash: 'newHashedPassword',
       });
       expect(result).toEqual(user);
     });
