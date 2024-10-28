@@ -5,7 +5,7 @@ export class User {
   @PrimaryGeneratedColumn({ name: 'user_id' })
   id: number;
 
-  @Column({ name: 'user_name' })
+  @Column('citext', { name: 'user_name', unique: true })
   name: string;
 
   @Column({ name: 'user_password_hash' })
