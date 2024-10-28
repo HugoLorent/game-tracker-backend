@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -22,10 +17,6 @@ export class UsersService {
 
   public async findUserById(id: number): Promise<User> {
     try {
-      if (!id) {
-        throw new BadRequestException('Id is required in route params');
-      }
-
       const user = await this.usersRepository.findOne({ where: { id } });
       if (!user) {
         throw new NotFoundException('User not found');
@@ -52,9 +43,6 @@ export class UsersService {
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
     try {
-      if (!createUserDto.name || !createUserDto.password) {
-        throw new BadRequestException('Name and password are required in body');
-      }
       const user = new User();
       const passwordHash = await bcrypt.hash(
         createUserDto.password,
@@ -71,13 +59,6 @@ export class UsersService {
 
   public async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     try {
-      if (!id) {
-        throw new BadRequestException('Id is required in route params');
-      }
-
-      if (!updateUserDto.name && !updateUserDto.password) {
-        throw new BadRequestException('Name or password are required in body');
-      }
       const toUpdate = await this.usersRepository.findOne({ where: { id } });
       if (!toUpdate) {
         throw new NotFoundException('User not found');
@@ -102,9 +83,6 @@ export class UsersService {
 
   public async delete(id: number): Promise<User> {
     try {
-      if (!id) {
-        throw new BadRequestException('Id is required in route params');
-      }
       const toDelete = await this.usersRepository.findOne({ where: { id } });
       if (!toDelete) {
         throw new NotFoundException('User not found');

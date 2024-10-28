@@ -3,9 +3,8 @@ import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -62,12 +61,6 @@ describe('UsersService', () => {
         passwordHash: 'hashedPassword',
       });
       expect(result).toEqual(user);
-    });
-
-    it('should throw an error if name or password are not provided', async () => {
-      await expect(
-        service.create({ name: '', password: '' } as CreateUserDto),
-      ).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -148,12 +141,6 @@ describe('UsersService', () => {
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(null);
       await expect(service.update(1, { name: 'test2' })).rejects.toThrow(
         NotFoundException,
-      );
-    });
-
-    it('should throw an error if no properties are not provided', async () => {
-      await expect(service.update(1, {} as UpdateUserDto)).rejects.toThrow(
-        BadRequestException,
       );
     });
   });
