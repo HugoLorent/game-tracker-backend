@@ -9,7 +9,7 @@ describe('UsersController', () => {
     create: jest.fn(),
     update: jest.fn(),
     delete: jest.fn(),
-    findUser: jest.fn(),
+    findUserById: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -113,16 +113,16 @@ describe('UsersController', () => {
         password: 'password',
       };
       jest
-        .spyOn(mockUsersService, 'findUser')
+        .spyOn(mockUsersService, 'findUserById')
         .mockImplementation(() => Promise.resolve({ id: 1, ...user }));
       const result = await controller.findUser(1);
-      expect(mockUsersService.findUser).toHaveBeenCalled();
-      expect(mockUsersService.findUser).toHaveBeenCalledWith(1);
+      expect(mockUsersService.findUserById).toHaveBeenCalled();
+      expect(mockUsersService.findUserById).toHaveBeenCalledWith(1);
       expect(result).toEqual({ id: 1, ...user });
     });
 
     it('should throw an error if user is not found', async () => {
-      jest.spyOn(mockUsersService, 'findUser').mockImplementation(() => {
+      jest.spyOn(mockUsersService, 'findUserById').mockImplementation(() => {
         throw new Error();
       });
       await expect(controller.findUser(1)).rejects.toThrow();

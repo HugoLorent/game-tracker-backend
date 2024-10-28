@@ -20,13 +20,26 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
-  public async findUser(id: number): Promise<User> {
+  public async findUserById(id: number): Promise<User> {
     try {
       if (!id) {
         throw new BadRequestException('Id is required in route params');
       }
 
       const user = await this.usersRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      return user;
+    } catch (error) {
+      this.logger.error('Error finding user', error);
+      throw error;
+    }
+  }
+
+  public async findUserByName(name: string): Promise<User> {
+    try {
+      const user = await this.usersRepository.findOne({ where: { name } });
       if (!user) {
         throw new NotFoundException('User not found');
       }

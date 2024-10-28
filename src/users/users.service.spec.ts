@@ -79,7 +79,7 @@ describe('UsersService', () => {
         passwordHash: 'hashedPassword',
       };
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(user);
-      const result = await service.findUser(1);
+      const result = await service.findUserById(1);
       expect(mockUserRepository.findOne).toHaveBeenCalled();
       expect(mockUserRepository.findOne).toHaveBeenCalledWith({
         where: { id: 1 },
@@ -87,9 +87,31 @@ describe('UsersService', () => {
       expect(result).toEqual(user);
     });
 
-    it('should throw an error if user is not found', async () => {
+    it('should throw an error if user is not found by id', async () => {
       jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(null);
-      await expect(service.findUser(1)).rejects.toThrow(NotFoundException);
+      await expect(service.findUserById(1)).rejects.toThrow(NotFoundException);
+    });
+
+    it('should find a user by name', async () => {
+      const user: User = {
+        id: 1,
+        name: 'test',
+        passwordHash: 'hashedPassword',
+      };
+      jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(user);
+      const result = await service.findUserByName('test');
+      expect(mockUserRepository.findOne).toHaveBeenCalled();
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({
+        where: { name: 'test' },
+      });
+      expect(result).toEqual(user);
+    });
+
+    it('should throw an error if user is not found by name', async () => {
+      jest.spyOn(mockUserRepository, 'findOne').mockResolvedValue(null);
+      await expect(service.findUserByName('test')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
