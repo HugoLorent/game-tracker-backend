@@ -62,6 +62,18 @@ describe('UsersService', () => {
       });
       expect(result).toEqual(user);
     });
+
+    it('should throw an error if user is not created', async () => {
+      jest.spyOn(mockUserRepository, 'save').mockImplementation(() => {
+        throw new Error();
+      });
+      await expect(
+        service.create({
+          name: 'test',
+          password: 'password',
+        } as CreateUserDto),
+      ).rejects.toThrow();
+    });
   });
 
   describe('findUser', () => {
@@ -129,7 +141,7 @@ describe('UsersService', () => {
         where: { id: 1 },
       });
       expect(mockUserRepository.save).toHaveBeenCalled();
-      expect(mockUserRepository.save).toHaveBeenNthCalledWith(2, {
+      expect(mockUserRepository.save).toHaveBeenNthCalledWith(3, {
         id: 1,
         name: 'test2',
         passwordHash: 'newHashedPassword',
