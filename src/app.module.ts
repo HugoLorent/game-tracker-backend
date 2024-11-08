@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import databaseConfig from './config/database.config';
 import { JwtModule } from '@nestjs/jwt';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { GamesModule } from './games/games.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     }),
     UsersModule,
     AuthModule,
+    GamesModule,
   ],
 })
 export class AppModule implements NestModule {
