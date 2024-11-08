@@ -18,7 +18,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get(':id')
-  async findUser(@Param('id') id: number): Promise<User> {
+  public async findUser(@Param('id') id: number): Promise<User> {
     try {
       return await this.usersService.findUserById(id);
     } catch (error) {
@@ -28,7 +28,7 @@ export class UsersController {
 
   @Public()
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+  public async create(@Body() createUserDto: CreateUserDto): Promise<User> {
     try {
       return await this.usersService.create(createUserDto);
     } catch (error) {
@@ -37,7 +37,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async update(
+  public async update(
     @Param('id') id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
@@ -49,7 +49,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number): Promise<User> {
+  public async delete(@Param('id') id: number): Promise<User> {
     try {
       return await this.usersService.delete(id);
     } catch (error) {
