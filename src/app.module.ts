@@ -7,6 +7,8 @@ import databaseConfig from './config/database.config';
 import { JwtModule } from '@nestjs/jwt';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { GamesModule } from './games/games.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './guards/authentication.guard';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { GamesModule } from './games/games.module';
     AuthModule,
     GamesModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -8,6 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { FastifyRequest } from 'fastify';
 import { IS_PUBLIC_KEY } from './decorators/public.decorator';
+import { UserPayload } from './interfaces/guards.interface';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -31,7 +32,7 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync<UserPayload>(token);
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException();
