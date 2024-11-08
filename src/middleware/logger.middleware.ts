@@ -3,10 +3,12 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
-  private readonly logger = new Logger(LoggerMiddleware.name);
+  private readonly logger = new Logger('HTTP');
 
-  use(req: FastifyRequest, res: FastifyReply, next: () => void) {
-    this.logger.log(`${req.method} ${req.originalUrl}`);
+  use(req: FastifyRequest['raw'], res: FastifyReply['raw'], next: () => void) {
+    res.on('close', () => {
+      this.logger.log(`${req.method} ${req.url} ${res.statusCode}`);
+    });
     next();
   }
 }
