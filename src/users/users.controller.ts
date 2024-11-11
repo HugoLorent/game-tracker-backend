@@ -6,17 +6,20 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Public } from '../guards/decorators/public.decorator';
+import { AuthorizationGuard } from '../guards/authorization.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(AuthorizationGuard)
   @Get(':id')
   public async findUser(@Param('id') id: number): Promise<User> {
     try {
@@ -36,6 +39,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthorizationGuard)
   @Patch(':id')
   public async update(
     @Param('id') id: number,
@@ -48,6 +52,7 @@ export class UsersController {
     }
   }
 
+  @UseGuards(AuthorizationGuard)
   @Delete(':id')
   public async delete(@Param('id') id: number): Promise<User> {
     try {
