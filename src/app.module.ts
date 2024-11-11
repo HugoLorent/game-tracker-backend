@@ -9,6 +9,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { GamesModule } from './games/games.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/authentication.guard';
+import { CollectionsModule } from './collections/collections.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuthGuard } from './guards/authentication.guard';
     UsersModule,
     AuthenticationModule,
     GamesModule,
+    CollectionsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
 })
