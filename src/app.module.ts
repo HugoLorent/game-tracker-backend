@@ -8,7 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { GamesModule } from './games/games.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './guards/authentication.guard';
+import { AuthenticationGuard } from './guards/authentication.guard';
 import { CollectionsModule } from './collections/collections.module';
 
 @Module({
@@ -25,7 +25,7 @@ import { CollectionsModule } from './collections/collections.module';
     GamesModule,
     CollectionsModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
+  providers: [{ provide: APP_GUARD, useClass: AuthenticationGuard }],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

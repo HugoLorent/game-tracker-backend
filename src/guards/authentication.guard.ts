@@ -11,7 +11,7 @@ import { IS_PUBLIC_KEY } from './decorators/public.decorator';
 import { UserPayload } from './interfaces/guards.interface';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthenticationGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     private reflector: Reflector,
