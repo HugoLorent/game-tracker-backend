@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 import databaseConfig from './config/database.config';
 import { JwtModule } from '@nestjs/jwt';
 import { LoggerMiddleware } from './middleware/logger.middleware';
@@ -20,7 +20,7 @@ import { AuthGuard } from './guards/authentication.guard';
       signOptions: { expiresIn: '1h' },
     }),
     UsersModule,
-    AuthModule,
+    AuthenticationModule,
     GamesModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],

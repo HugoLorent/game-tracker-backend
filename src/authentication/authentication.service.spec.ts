@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthService } from './auth.service';
+import { AuthenticationService } from './authentication.service';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {
-  let service: AuthService;
+  let service: AuthenticationService;
 
   const mockUserService = {
     findUserByName: jest.fn(),
@@ -19,13 +19,13 @@ describe('AuthService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        AuthService,
+        AuthenticationService,
         { provide: UsersService, useValue: mockUserService },
         { provide: JwtService, useValue: mockJwtService },
       ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    service = module.get<AuthenticationService>(AuthenticationService);
   });
 
   it('should be defined', () => {
