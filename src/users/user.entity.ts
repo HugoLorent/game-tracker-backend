@@ -13,5 +13,5 @@ export class User {
   passwordHash: string;
 
   @OneToMany(() => Collection, (collection) => collection.user)
-  collections: Collection[];
+  collections?: Collection[];
 }
