@@ -13,7 +13,7 @@ import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { Collection } from './entities/collection.entity';
-import { AuthorizationGuard } from '../guards/authorization.guard';
+import { AuthorizationGuard } from '../common/guards/authorization.guard';
 
 @Controller('users/:userId/collections')
 export class CollectionsController {

@@ -5,10 +5,10 @@ import { UsersModule } from './users/users.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import databaseConfig from './config/database.config';
 import { JwtModule } from '@nestjs/jwt';
-import { LoggerMiddleware } from './middleware/logger.middleware';
+import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { GamesModule } from './games/games.module';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthenticationGuard } from './guards/authentication.guard';
+import { AuthenticationGuard } from './common/guards/authentication.guard';
 import { CollectionsModule } from './collections/collections.module';
 
 @Module({

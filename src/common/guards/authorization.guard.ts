@@ -5,7 +5,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { FastifyRequest } from 'fastify';
-import { UserPayload } from './interfaces/guards.interface';
+import { UserPayload } from '../interfaces/guards.interface';
 
 @Injectable()
 export class AuthorizationGuard implements CanActivate {
