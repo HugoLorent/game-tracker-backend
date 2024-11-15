@@ -20,8 +20,8 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(AuthorizationGuard)
-  @Get(':id')
-  public async findUser(@Param('id') id: number): Promise<User> {
+  @Get(':userId')
+  public async findUser(@Param('userId') id: number): Promise<User> {
     try {
       return await this.usersService.findUserById(id);
     } catch (error) {
@@ -40,9 +40,9 @@ export class UsersController {
   }
 
   @UseGuards(AuthorizationGuard)
-  @Patch(':id')
+  @Patch(':userId')
   public async update(
-    @Param('id') id: number,
+    @Param('userId') id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
     try {
@@ -53,8 +53,8 @@ export class UsersController {
   }
 
   @UseGuards(AuthorizationGuard)
-  @Delete(':id')
-  public async delete(@Param('id') id: number): Promise<User> {
+  @Delete(':userId')
+  public async delete(@Param('userId') id: number): Promise<User> {
     try {
       return await this.usersService.delete(id);
     } catch (error) {

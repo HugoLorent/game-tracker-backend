@@ -1,34 +1,83 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Logger,
+  UseGuards,
+} from '@nestjs/common';
 import { CollectionsService } from './collections.service';
 import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
+import { Collection } from './entities/collection.entity';
+import { AuthorizationGuard } from '../guards/authorization.guard';
 
-@Controller('collections')
+@Controller('users/:userId/collections')
 export class CollectionsController {
+  private readonly logger = new Logger(CollectionsController.name);
+
   constructor(private readonly collectionsService: CollectionsService) {}
 
+  @UseGuards(AuthorizationGuard)
   @Post()
-  create(@Body() createCollectionDto: CreateCollectionDto) {
-    return this.collectionsService.create(createCollectionDto);
+  public async create(
+    @Param('userId') userId: number,
+    @Body() createCollectionDto: CreateCollectionDto,
+  ): Promise<Collection> {
+    try {
+      return this.collectionsService.create(userId, createCollectionDto);
+    } catch (error) {
+      throw error;
+    }
   }
 
+  @UseGuards(AuthorizationGuard)
   @Get()
-  findAll() {
-    return this.collectionsService.findAll();
+  public async findAll(@Param('userId') userId: number): Promise<Collection[]> {
+    try {
+      return this.collectionsService.findAll(userId);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.collectionsService.findOne(+id);
+  @UseGuards(AuthorizationGuard)
+  @Get(':collectionId')
+  public async findOne(
+    @Param('collectionId') collectionId: number,
+  ): Promise<Collection> {
+    try {
+      return this.collectionsService.findOne(collectionId);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCollectionDto: UpdateCollectionDto) {
-    return this.collectionsService.update(+id, updateCollectionDto);
+  @UseGuards(AuthorizationGuard)
+  @Patch(':collectionId')
+  public async update(
+    @Param('collectionId') collectionId: number,
+    @Body() updateCollectionDto: UpdateCollectionDto,
+  ): Promise<Collection> {
+    try {
+      return this.collectionsService.update(collectionId, updateCollectionDto);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.collectionsService.remove(+id);
+  @UseGuards(AuthorizationGuard)
+  @Delete(':collectionId')
+  public async remove(
+    @Param('collectionId') collectionId: number,
+  ): Promise<Collection> {
+    try {
+      return this.collectionsService.remove(collectionId);
+    } catch (error) {
+      throw error;
+    }
   }
 }
