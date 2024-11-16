@@ -3,6 +3,8 @@ import { CollectionsService } from './collections.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Collection } from './entities/collection.entity';
 import { UsersService } from '../users/users.service';
+import { GamesService } from '../games/games.service';
+import { CollectionsGamesService } from '../collections-games/collections-games.service';
 
 describe('CollectionsService', () => {
   let service: CollectionsService;
@@ -18,6 +20,14 @@ describe('CollectionsService', () => {
     findUserById: jest.fn(),
   };
 
+  const mockGamesService = {
+    findUserById: jest.fn(),
+  };
+
+  const mockCollectionsGamesService = {
+    create: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -27,6 +37,11 @@ describe('CollectionsService', () => {
           useValue: mockCollectionsRepository,
         },
         { provide: UsersService, useValue: mockUserService },
+        { provide: GamesService, useValue: mockGamesService },
+        {
+          provide: CollectionsGamesService,
+          useValue: mockCollectionsGamesService,
+        },
       ],
     }).compile();
 
