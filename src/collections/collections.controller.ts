@@ -14,6 +14,7 @@ import { CreateCollectionDto } from './dto/create-collection.dto';
 import { UpdateCollectionDto } from './dto/update-collection.dto';
 import { Collection } from './entities/collection.entity';
 import { AuthorizationGuard } from '../common/guards/authorization.guard';
+import { AddGamesToCollectionDto } from './dto/add-games-to-collection.dto';
 
 @Controller('users/:userId/collections')
 export class CollectionsController {
@@ -76,6 +77,22 @@ export class CollectionsController {
   ): Promise<Collection> {
     try {
       return this.collectionsService.remove(collectionId);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @UseGuards(AuthorizationGuard)
+  @Post(':collectionId')
+  public async addGamesToCollection(
+    @Param('collectionId') collectionId: number,
+    @Body() addGamesToCollectionDto: AddGamesToCollectionDto,
+  ): Promise<void> {
+    try {
+      return this.collectionsService.addGamesToCollection(
+        collectionId,
+        addGamesToCollectionDto,
+      );
     } catch (error) {
       throw error;
     }

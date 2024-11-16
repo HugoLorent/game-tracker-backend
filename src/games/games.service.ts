@@ -29,7 +29,7 @@ export class GamesService {
     try {
       const game = await this.gamesRepository.findOne({ where: { id } });
       if (!game) {
-        throw new NotFoundException('Game not found');
+        throw new NotFoundException(`Game with id ${id} not found`);
       }
       return game;
     } catch (error) {

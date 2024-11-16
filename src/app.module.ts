@@ -10,6 +10,7 @@ import { GamesModule } from './games/games.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './common/guards/authentication.guard';
 import { CollectionsModule } from './collections/collections.module';
+import { CollectionsGamesModule } from './collections-games/collections-games.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CollectionsModule } from './collections/collections.module';
     AuthenticationModule,
     GamesModule,
     CollectionsModule,
+    CollectionsGamesModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: AuthenticationGuard }],
 })
