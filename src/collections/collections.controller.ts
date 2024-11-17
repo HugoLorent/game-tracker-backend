@@ -83,7 +83,7 @@ export class CollectionsController {
   }
 
   @UseGuards(AuthorizationGuard)
-  @Post(':collectionId')
+  @Post(':collectionId/games')
   public async addGamesToCollection(
     @Param('collectionId') collectionId: number,
     @Body() addGamesToCollectionDto: AddGamesToCollectionDto,
