@@ -19,7 +19,7 @@ import { CollectionsGamesModule } from './collections-games/collections-games.mo
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '2h' },
     }),
     UsersModule,
     AuthenticationModule,
