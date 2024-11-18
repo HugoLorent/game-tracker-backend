@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
@@ -7,7 +12,7 @@ import databaseConfig from './config/database.config';
 import { JwtModule } from '@nestjs/jwt';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { GamesModule } from './games/games.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { AuthenticationGuard } from './common/guards/authentication.guard';
 import { CollectionsModule } from './collections/collections.module';
 import { CollectionsGamesModule } from './collections-games/collections-games.module';
@@ -27,7 +32,13 @@ import { CollectionsGamesModule } from './collections-games/collections-games.mo
     CollectionsModule,
     CollectionsGamesModule,
   ],
-  providers: [{ provide: APP_GUARD, useClass: AuthenticationGuard }],
+  providers: [
+    { provide: APP_GUARD, useClass: AuthenticationGuard },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

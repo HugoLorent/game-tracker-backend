@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Collection } from '../collections/entities/collection.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
 export class User {
@@ -9,6 +10,7 @@ export class User {
   @Column('citext', { name: 'user_name', unique: true })
   name: string;
 
+  @Exclude()
   @Column({ name: 'user_password_hash' })
   passwordHash: string;
 
