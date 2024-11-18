@@ -14,7 +14,7 @@ export class Collection {
   @PrimaryGeneratedColumn({ name: 'collection_id' })
   id: number;
 
-  @Column('citext', { name: 'collection_name', unique: true })
+  @Column({ name: 'collection_name' })
   name: string;
 
   @ManyToOne(() => User, (user) => user.collections)
